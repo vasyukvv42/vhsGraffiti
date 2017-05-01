@@ -10,12 +10,17 @@
 #include <QWidget>
 #include <QAction>
 #include <QIcon>
+#include <QFileDialog>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
+public slots:
+    void onGenerateTokenAction();
+    void onChooseFileAction();
+    //TODO: upload button slot
 private:
     void setupUi();
 
@@ -25,7 +30,7 @@ private:
     QLineEdit *m_filePathEdit;
     QLineEdit *m_nameEdit;
     QAction *m_generateTokenAction;
-    QAction *m_openFileDialogAction;
+    QAction *m_chooseFileAction;
 };
 
 #endif // MAINWINDOW_H

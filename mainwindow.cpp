@@ -3,7 +3,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     setupUi();
-    //TODO: connect everything
+    connect(m_chooseFileAction, SIGNAL(triggered(bool)),
+                      this, SLOT(onChooseFileAction()));
+    //TODO: other slots
     //TODO: save/read settings
 }
 
@@ -26,10 +28,10 @@ void MainWindow::setupUi()
 
     QIcon folderIcon(":/icons/folder.svg");
     m_filePathEdit = new QLineEdit(m_centralWidget);
-    m_openFileDialogAction = new QAction("Choose file...", this);
-    m_openFileDialogAction->setToolTip("Choose input file");
-    m_openFileDialogAction->setIcon(folderIcon);
-    m_filePathEdit->addAction(m_openFileDialogAction, QLineEdit::TrailingPosition);
+    m_chooseFileAction = new QAction("Choose file...", this);
+    m_chooseFileAction->setToolTip("Choose input file");
+    m_chooseFileAction->setIcon(folderIcon);
+    m_filePathEdit->addAction(m_chooseFileAction, QLineEdit::TrailingPosition);
     formLayout->addRow("Input file: ", m_filePathEdit);
 
     m_nameEdit = new QLineEdit(m_centralWidget);
@@ -42,4 +44,17 @@ void MainWindow::setupUi()
     gridLayout->addWidget(m_uploadButton, 3, 1);
 
     setCentralWidget(m_centralWidget);
+}
+
+void MainWindow::onGenerateTokenAction()
+{
+    //TODO: implement getting new VK token
+}
+
+void MainWindow::onChooseFileAction()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "Choose input file",
+                                                    QDir::homePath(),
+                /* Only those types were tested*/   "Images (*.gif *.png *.jpg)");
+    m_filePathEdit->setText(filename);
 }
