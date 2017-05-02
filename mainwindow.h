@@ -14,6 +14,8 @@
 #include <QWebEngineView>
 #include <QEventLoop>
 #include <QUrlQuery>
+#include <QStandardPaths>
+#include <QTextStream>
 
 class MainWindow : public QMainWindow
 {
@@ -28,6 +30,7 @@ public slots:
     //TODO: upload button slot
 private:
     void setupUi();
+    QString createConfigDir();
 
     QWidget *m_centralWidget;
     QPushButton *m_uploadButton;

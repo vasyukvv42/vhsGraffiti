@@ -7,12 +7,24 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                       this, SLOT(onChooseFileAction()));
     connect(m_generateTokenAction, SIGNAL(triggered(bool)),
                       this, SLOT(onGenerateTokenAction()));
+
+    QFile tokenFile(createConfigDir());
+    tokenFile.open(QIODevice::Text | QIODevice::ReadOnly);
+    QTextStream in(&tokenFile);
+    QString token;
+    in >> token;
+    m_tokenEdit->setText(token);
+
     //TODO: other slots
-    //TODO: save/read settings
 }
 
 MainWindow::~MainWindow()
 {
+    QFile tokenFile(createConfigDir());
+    tokenFile.open(QIODevice::Text | QIODevice::WriteOnly | QIODevice::Truncate);
+    QTextStream out(&tokenFile);
+    out << m_tokenEdit->text();
+
     delete m_webView;
 }
 
@@ -84,4 +96,18 @@ void MainWindow::onChooseFileAction()
                                                     QDir::homePath(),
                 /* Only those types were tested*/   "Images (*.gif *.png *.jpg)");
     m_filePathEdit->setText(filename);
+}
+
+QString MainWindow::createConfigDir()
+{
+    QString configPath;
+    QDir path;
+    configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
+                                        QString(),
+                                        QStandardPaths::LocateDirectory);
+    path.mkpath(configPath + "vhsGraffiti");
+    configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
+                                        "vhsGraffiti",
+                                        QStandardPaths::LocateDirectory);
+    return QDir::cleanPath(configPath + QDir::separator() + "token.txt");
 }
