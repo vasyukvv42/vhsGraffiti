@@ -16,6 +16,7 @@
 #include <QUrlQuery>
 #include <QStandardPaths>
 #include <QTextStream>
+#include "vkdocuploader.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,7 +28,7 @@ public slots:
     void onGenerateTokenAction();
     void onUrlChanged(const QUrl &url);
     void onChooseFileAction();
-    //TODO: upload button slot
+    void onUploadButtonClicked();
 private:
     void setupUi();
     QString createConfigDir();
@@ -36,10 +37,11 @@ private:
     QPushButton *m_uploadButton;
     QLineEdit *m_tokenEdit;
     QLineEdit *m_filePathEdit;
-    QLineEdit *m_nameEdit;
+    QLineEdit *m_titleEdit;
     QAction *m_generateTokenAction;
     QAction *m_chooseFileAction;
     QWebEngineView *m_webView;
+    VKDocUploader *m_uploader;
 };
 
 #endif // MAINWINDOW_H

@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                       this, SLOT(onChooseFileAction()));
     connect(m_generateTokenAction, SIGNAL(triggered(bool)),
                       this, SLOT(onGenerateTokenAction()));
+    connect(m_uploadButton, SIGNAL(clicked(bool)),
+            this, SLOT(onUploadButtonClicked()));
 
     QFile tokenFile(createConfigDir());
     tokenFile.open(QIODevice::Text | QIODevice::ReadOnly);
@@ -53,8 +55,8 @@ void MainWindow::setupUi()
     m_filePathEdit->addAction(m_chooseFileAction, QLineEdit::TrailingPosition);
     formLayout->addRow("Input file: ", m_filePathEdit);
 
-    m_nameEdit = new QLineEdit(m_centralWidget);
-    formLayout->addRow("Graffiti name: ", m_nameEdit);
+    m_titleEdit = new QLineEdit(m_centralWidget);
+    formLayout->addRow("Graffiti title: ", m_titleEdit);
 
     gridLayout->addLayout(formLayout, 0, 0, 3, 3);
 
@@ -110,4 +112,13 @@ QString MainWindow::createConfigDir()
                                         "vhsGraffiti",
                                         QStandardPaths::LocateDirectory);
     return QDir::cleanPath(configPath + QDir::separator() + "token.txt");
+}
+
+void MainWindow::onUploadButtonClicked()
+{
+    m_uploader = new VKDocUploader("m_tokenEdit->text()",
+                                   m_filePathEdit->text(),
+                                   m_titleEdit->text());
+    qDebug() << m_uploader->getUploadServer();
+    qDebug() << m_uploader->getUploadServer(true);
 }
