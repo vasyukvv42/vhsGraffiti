@@ -29,6 +29,8 @@ public slots:
     void onUrlChanged(const QUrl &url);
     void onChooseFileAction();
     void onUploadButtonClicked();
+    void onApiError(const QString &title, const QString &info);
+    void onUploadFinished();
 private:
     void setupUi();
     QString createConfigDir();

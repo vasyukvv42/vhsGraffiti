@@ -116,9 +116,24 @@ QString MainWindow::createConfigDir()
 
 void MainWindow::onUploadButtonClicked()
 {
-    m_uploader = new VKDocUploader("m_tokenEdit->text()",
+    m_uploader = new VKDocUploader(m_tokenEdit->text(),
                                    m_filePathEdit->text(),
                                    m_titleEdit->text());
-    qDebug() << m_uploader->getUploadServer();
-    qDebug() << m_uploader->getUploadServer(true);
+    m_uploader->deleteLater();
+    connect(m_uploader, SIGNAL(errorOccurred(QString,QString)),
+                      this, SLOT(onApiError(QString,QString)));
+    connect(m_uploader, SIGNAL(uploadFinished()),
+                 this, SLOT(onUploadFinished()));
+    m_uploader->uploadGraffiti();
+}
+
+void MainWindow::onApiError(const QString &title, const QString &info)
+{
+    QMessageBox::critical(this, title, info);
+}
+
+void MainWindow::onUploadFinished()
+{
+    QMessageBox::information(this, "Upload Finished",
+                             "Graffiti successfully uploaded!");
 }

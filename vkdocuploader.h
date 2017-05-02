@@ -12,6 +12,9 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QMessageBox>
+#include <QHttpMultiPart>
+#include <QHttpPart>
+#include <QFile>
 
 class VKDocUploader : public QObject
 {
@@ -21,12 +24,15 @@ public:
                            const QString &title, QObject *parent = 0);
     void uploadGraffiti();
     QString getUploadServer(bool graffiti = false);
-    QString uploadDoc(const QString &server);
-    void docSave(const QString &fileString);
+    QString docUpload(const QString &server);
+    QString docSave(const QString &fileString);
+signals:
+    void errorOccurred(const QString &title, const QString &info);
+    void uploadFinished();
 private:
     QString m_accessToken;
     QString m_filePath;
-    QString m_docTitle;
+    QByteArray m_docTitle;
     QNetworkAccessManager m_accessManager;
 };
 
