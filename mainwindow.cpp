@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(m_uploadButton, SIGNAL(clicked(bool)),
             this, SLOT(onUploadButtonClicked()));
 
-    QFile tokenFile(createConfigDir());
+    QFile tokenFile(configFilePath());
     tokenFile.open(QIODevice::Text | QIODevice::ReadOnly);
     QTextStream in(&tokenFile);
     QString token;
@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 MainWindow::~MainWindow()
 {
-    QFile tokenFile(createConfigDir());
+    QFile tokenFile(configFilePath());
     tokenFile.open(QIODevice::Text | QIODevice::WriteOnly | QIODevice::Truncate);
     QTextStream out(&tokenFile);
     out << m_tokenEdit->text();
@@ -100,18 +100,16 @@ void MainWindow::onChooseFileAction()
     m_filePathEdit->setText(filename);
 }
 
-QString MainWindow::createConfigDir()
+QString MainWindow::configFilePath()
 {
     QString configPath;
-    QDir path;
     configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
                                         QString(),
                                         QStandardPaths::LocateDirectory);
-    path.mkpath(configPath + "vhsGraffiti");
-    configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
-                                        "vhsGraffiti",
-                                        QStandardPaths::LocateDirectory);
-    return QDir::cleanPath(configPath + QDir::separator() + "token.txt");
+    QDir().mkpath(configPath + "vhsGraffiti");
+    return QDir::cleanPath(configPath + QDir::separator() +
+                           "vhsGraffiti" + QDir::separator() +
+                           "token.txt");
 }
 
 void MainWindow::onUploadButtonClicked()

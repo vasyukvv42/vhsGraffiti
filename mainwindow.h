@@ -33,7 +33,7 @@ public slots:
     void onUploadFinished();
 private:
     void setupUi();
-    QString createConfigDir();
+    QString configFilePath();
 
     QWidget *m_centralWidget;
     QPushButton *m_uploadButton;
