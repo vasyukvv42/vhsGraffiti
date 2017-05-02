@@ -16,17 +16,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QString token;
     in >> token;
     m_tokenEdit->setText(token);
-
-    //TODO: other slots
 }
 
 MainWindow::~MainWindow()
 {
-    QFile tokenFile(configFilePath());
-    tokenFile.open(QIODevice::Text | QIODevice::WriteOnly | QIODevice::Truncate);
-    QTextStream out(&tokenFile);
-    out << m_tokenEdit->text();
-
     delete m_webView;
 }
 
@@ -89,6 +82,10 @@ void MainWindow::onUrlChanged(const QUrl &url)
     if (query.hasQueryItem(queryKey)) {
         m_tokenEdit->setText(query.queryItemValue(queryKey));
         m_webView->close();
+        QFile tokenFile(configFilePath());
+        tokenFile.open(QIODevice::Text | QIODevice::WriteOnly | QIODevice::Truncate);
+        QTextStream out(&tokenFile);
+        out << m_tokenEdit->text();
     }
 }
 
@@ -96,7 +93,7 @@ void MainWindow::onChooseFileAction()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Choose input file",
                                                     QDir::homePath(),
-                /* Only those types were tested*/   "Images (*.gif *.png *.jpg)");
+                /*Only gif and png work*/           "Images (*.gif *.png)");
     m_filePathEdit->setText(filename);
 }
 
